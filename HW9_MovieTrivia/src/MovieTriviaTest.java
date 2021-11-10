@@ -2,8 +2,7 @@ import file.MovieDB;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 class MovieTriviaTest {
@@ -60,70 +59,72 @@ class MovieTriviaTest {
 
 		// TODO add additional test case scenarios
 	}
-//
-//	@Test
-//	void testSelectWhereActorIs () {
-//		assertEquals(3, mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).size());
-//		assertEquals("doubt", mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).get(0));
-//
-//		// TODO add additional test case scenarios
-//	}
-//
-//	@Test
-//	void testSelectWhereMovieIs () {
-//		assertEquals(2, mt.selectWhereMovieIs("doubt", movieDB.getActorsInfo()).size());
-//		assertEquals(true, mt.selectWhereMovieIs("doubt", movieDB.getActorsInfo()).contains("meryl streep"));
-//		assertEquals(true, mt.selectWhereMovieIs("doubt", movieDB.getActorsInfo()).contains("amy adams"));
-//
-//		// TODO add additional test case scenarios
-//	}
-//
-//	@Test
-//	void testSelectWhereRatingIs () {
-//		assertEquals(6, mt.selectWhereRatingIs('>', 0, true, movieDB.getMoviesInfo()).size());
-//		assertEquals(0, mt.selectWhereRatingIs('=', 65, false, movieDB.getMoviesInfo()).size());
-//		assertEquals(2, mt.selectWhereRatingIs('<', 30, true, movieDB.getMoviesInfo()).size());
-//
-//		// TODO add additional test case scenarios
-//	}
-//
-//	@Test
-//	void testGetCoActors () {
-//		assertEquals(2, mt.getCoActors("meryl streep", movieDB.getActorsInfo()).size());
-//		assertTrue(mt.getCoActors("meryl streep", movieDB.getActorsInfo()).contains("tom hanks"));
-//		assertTrue(mt.getCoActors("meryl streep", movieDB.getActorsInfo()).contains("amy adams"));
-//
-//		// TODO add additional test case scenarios
-//	}
-//
-//	@Test
-//	void testGetCommonMovie () {
-//		assertEquals(1, mt.getCommonMovie("meryl streep", "tom hanks", movieDB.getActorsInfo()).size());
-//		assertTrue(mt.getCommonMovie("meryl streep", "tom hanks", movieDB.getActorsInfo()).contains("the post"));
-//
-//		// TODO add additional test case scenarios
-//	}
-//
-//	@Test
-//	void testGoodMovies () {
-//		assertEquals(3, mt.goodMovies(movieDB.getMoviesInfo()).size());
-//		assertTrue(mt.goodMovies(movieDB.getMoviesInfo()).contains("jaws"));
-//
-//		// TODO add additional test case scenarios
-//	}
-//
-//	@Test
-//	void testGetCommonActors () {
-//		assertEquals(1, mt.getCommonActors("doubt", "the post", movieDB.getActorsInfo()).size());
-//		assertTrue(mt.getCommonActors("doubt", "the post", movieDB.getActorsInfo()).contains("meryl streep"));
-//
-//		// TODO add additional test case scenarios
-//	}
+
+	@Test
+	void testSelectWhereActorIs () {
+		assertEquals(3, mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).size());
+		assertEquals("doubt", mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).get(0));
+
+		// TODO add additional test case scenarios
+	}
+
+	@Test
+	void testSelectWhereMovieIs () {
+		assertEquals(2, mt.selectWhereMovieIs("doubt", movieDB.getActorsInfo()).size());
+		assertEquals(true, mt.selectWhereMovieIs("doubt", movieDB.getActorsInfo()).contains("meryl streep"));
+		assertEquals(true, mt.selectWhereMovieIs("doubt", movieDB.getActorsInfo()).contains("amy adams"));
+
+		// TODO add additional test case scenarios
+	}
+
+	@Test
+	void testSelectWhereRatingIs () {
+		assertEquals(6, mt.selectWhereRatingIs('>', 0, true, movieDB.getMoviesInfo()).size());
+		assertEquals(0, mt.selectWhereRatingIs('=', 65, false, movieDB.getMoviesInfo()).size());
+		assertEquals(2, mt.selectWhereRatingIs('<', 30, true, movieDB.getMoviesInfo()).size());
+
+		// TODO add additional test case scenarios
+	}
+
+	@Test
+	void testGetCoActors () {
+		assertEquals(2, mt.getCoActors("meryl streep", movieDB.getActorsInfo()).size());
+		assertTrue(mt.getCoActors("meryl streep", movieDB.getActorsInfo()).contains("tom hanks"));
+		assertTrue(mt.getCoActors("meryl streep", movieDB.getActorsInfo()).contains("amy adams"));
+
+		// TODO add additional test case scenarios
+	}
+
+	@Test
+	void testGetCommonMovie () {
+		assertEquals(1, mt.getCommonMovie("meryl streep", "tom hanks", movieDB.getActorsInfo()).size());
+		assertTrue(mt.getCommonMovie("meryl streep", "tom hanks", movieDB.getActorsInfo()).contains("the post"));
+
+		// TODO add additional test case scenarios
+	}
+
+	@Test
+	void testGoodMovies () {
+		assertEquals(3, mt.goodMovies(movieDB.getMoviesInfo()).size());
+		assertTrue(mt.goodMovies(movieDB.getMoviesInfo()).contains("jaws"));
+
+		// TODO add additional test case scenarios
+	}
+
+	@Test
+	void testGetCommonActors () {
+		assertEquals(1, mt.getCommonActors("doubt", "the post", movieDB.getActorsInfo()).size());
+		assertTrue(mt.getCommonActors("doubt", "the post", movieDB.getActorsInfo()).contains("meryl streep"));
+
+		// TODO add additional test case scenarios
+	}
 	
 	@Test
 	void testGetMean () {
-		fail();
-		
+		//fail();
+
 		// TODO add ALL test case scenarios!
+		assertEquals(67.85, mt.getMean(movieDB.getMoviesInfo())[0], 0.01);
+		assertEquals(65.71, mt.getMean(movieDB.getMoviesInfo())[1], 0.01);
 	}
 }

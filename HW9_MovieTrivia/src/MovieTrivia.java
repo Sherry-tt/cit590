@@ -3,6 +3,7 @@ import movies.Actor;
 import movies.Movie;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Movie trivia class providing different methods for querying and updating a movie database.
@@ -109,9 +110,9 @@ public class MovieTrivia {
 	/**
 	 * Inserts given ratings for given movie into database.
 	 * Update the ratings for a movie if the movie is already in the database
-	 * @param movie
-	 * @param ratings
-	 * @param moviesInfo
+	 * @param movie is the movie name as a string
+	 * @param ratings is an int array with 2 elements
+	 * @param moviesInfo is the ArrayList that is to be inserted into/updated
 	 */
 	public void insertRating (String movie, int [] ratings, ArrayList <Movie> moviesInfo) {
 		if (ratings.length != 2) return;
@@ -121,4 +122,213 @@ public class MovieTrivia {
 		Movie newMovie = new Movie(movie.trim().toLowerCase(), ratings[0], ratings[1]);
 		moviesInfo.add(newMovie);
 	}
+
+	/**
+	 * Given an actor, returns the list of all movies
+	 * @param actor is the name of an actor as a String
+	 * @param actorsInfo is the ArrayList to get the data from
+	 * @return
+	 */
+	public ArrayList <String> selectWhereActorIs (String actor, ArrayList <Actor> actorsInfo) {
+		for (Actor actorInfo : actorsInfo) {
+			if (actorInfo.getName().equals(actor.trim().toLowerCase())) {
+				return actorInfo.getMoviesCast();
+			}
+		}
+		return new ArrayList <String>();
+	}
+
+	/**
+	 * Given a movie, returns the list of all actors in that movie
+	 * @param movie  is the name of a movie as a String
+	 * @param actorsInfo is the ArrayList to get the data from
+	 * @return the list of all actors in that movie
+	 */
+	public ArrayList <String> selectWhereMovieIs (String movie, ArrayList <Actor> actorsInfo) {
+		ArrayList<String> res = new ArrayList<>();
+		for (Actor actorInfo : actorsInfo) {
+			if (actorInfo.getMoviesCast().contains(movie.trim().toLowerCase())) {
+				res.add(actorInfo.getName());
+			}
+		}
+		return res;
+	}
+
+	/**
+	 * returns a list of movies that satisfy an inequality or equality
+	 * @param comparison either ‘=’, ‘>’, or ‘< ‘
+	 * @param targetRating is an integer
+	 * @param isCritic true = critic ratings, false = audience ratings.
+	 * @param moviesInfo is the ArrayList to get the data from
+	 * @return a list of movies that satisfy an inequality or equality
+	 */
+
+	public ArrayList<String> selectWhereRatingIs (char comparison, int targetRating, boolean isCritic, ArrayList <Movie> moviesInfo) {
+
+		ArrayList<String> res = new ArrayList<>();
+		if (targetRating< 0 || targetRating > 100) return res;
+		else if (comparison != '>' && comparison != '=' && comparison != '<') return res;
+
+		if (isCritic == true) {
+			res = selectWhereCriticRatingIs(comparison, targetRating, moviesInfo);
+		} else {
+			res = selectWhereAudienceRatingIs(comparison, targetRating, moviesInfo);
+		}
+		return res;
+	}
+
+	/**
+	 * returns a list of movies whose CriticRating satisfy an inequality or equality
+	 * @param comparison either ‘=’, ‘>’, or ‘< ‘
+	 * @param targetRating is an integer
+	 * @param moviesInfo is the ArrayList to get the data from
+	 * @return a list of movies whose CriticRating satisfy an inequality or equality
+	 */
+
+	private ArrayList<String> selectWhereCriticRatingIs (char comparison, int targetRating, ArrayList <Movie> moviesInfo) {
+		ArrayList<String> temp = new ArrayList<>();
+		for (Movie movieInfo : moviesInfo) {
+			if (comparison == '='){
+				if (movieInfo.getCriticRating() == targetRating) temp.add(movieInfo.getName());
+			} else if (comparison == '>') {
+				if (movieInfo.getCriticRating() > targetRating) temp.add(movieInfo.getName());
+		    } else {
+				if (movieInfo.getCriticRating() < targetRating) temp.add(movieInfo.getName());
+	        }
+		}
+		return temp;
+	}
+
+	/**
+	 * returns a list of movies whose AudienceRating satisfy an inequality or equality
+	 * @param comparison either ‘=’, ‘>’, or ‘< ‘
+	 * @param targetRating is an integer
+	 * @param moviesInfo is the ArrayList to get the data from
+	 * @return a list of movies whose AudienceRating satisfy an inequality or equality
+	 */
+
+	private ArrayList<String> selectWhereAudienceRatingIs (char comparison, int targetRating, ArrayList <Movie> moviesInfo) {
+		ArrayList<String> temp = new ArrayList<>();
+		for (Movie movieInfo : moviesInfo) {
+			if (comparison == '='){
+				if (movieInfo.getAudienceRating() == targetRating) temp.add(movieInfo.getName());
+			} else if (comparison == '>') {
+				if (movieInfo.getAudienceRating() > targetRating) temp.add(movieInfo.getName());
+			} else {
+				if (movieInfo.getAudienceRating() < targetRating) temp.add(movieInfo.getName());
+			}
+		}
+		return temp;
+	}
+
+	/**
+	 * get the list of all actors that the given actor has ever worked with in any movie except the actor herself/himself.
+	 * @param actor is the name of an actor as a String
+	 * @param actorsInfo is the ArrayList to search through
+	 * @return Returns a list of all actors that the given actor has ever worked with in any movie.
+	 */
+	public ArrayList <String> getCoActors (String actor, ArrayList <Actor> actorsInfo) {
+		//return a list of all movies
+		// selectWhereActorIs (String actor, ArrayList <Actor> actorsInfo
+		// returns the list of all actors in that movie
+		//selectWhereMovieIs (String movie, ArrayList <Actor> actorsInfo)
+		ArrayList <String> res = new ArrayList<>();
+		// a list of all movies the actor act
+		ArrayList<String> moviesIn = selectWhereActorIs (actor, actorsInfo);
+		if (moviesIn.isEmpty()) return res;
+		for (String movieIn : moviesIn) {
+			// a list of actors in the given movie
+			ArrayList<String> actorsIn = selectWhereMovieIs (movieIn, actorsInfo);
+			for (String actorIn: actorsIn) {
+				if (! actorIn.equals(actor) && ! res.contains(actorIn)) res.add(actorIn.trim());
+			}
+		}
+		return res;
+	}
+
+	/**
+	 * get a list od movie where both actors were cast
+	 * @param actor1 actor names as String
+	 * @param actor2 actor names as String
+	 * @param actorsInfo the ArrayList to search through
+	 * @return a list of movie names where both actors were cast.
+	 */
+
+	public ArrayList <String> getCommonMovie (String actor1, String actor2, ArrayList <Actor> actorsInfo) {
+		ArrayList <String> res = new ArrayList<>();
+		ArrayList <String> movies1 = selectWhereActorIs (actor1, actorsInfo);
+		ArrayList <String> movies2 = selectWhereActorIs (actor2, actorsInfo);
+		if (movies1.isEmpty() || movies2.isEmpty()) return res;
+		if (actor1.trim().toLowerCase().equals(actor2.trim().toLowerCase())) return movies1;
+		for (String movie : movies1) {
+			if (movies2.contains(movie)) res.add(movie);
+		}
+		return res;
+	}
+
+	/**
+	 * Returns a list of movie names that both critics and the audience have rated above 85 (>= 85).
+	 * @param moviesInfo
+	 * @return is the ArrayList to search through
+	 */
+
+	public ArrayList <String> goodMovies (ArrayList <Movie> moviesInfo) {
+		ArrayList <String> res = new ArrayList<>();
+		for (Movie movie : moviesInfo) {
+			if (movie.getCriticRating() >= 85 && movie.getAudienceRating() >= 85) res.add(movie.getName());
+		}
+		return res;
+	}
+
+	/**
+	 * Given a pair of movies, this method returns a list of actors that acted in both movies.
+	 * @param movie1 is the names of movie as String
+	 * @param movie2 is the names of movie as String
+	 * @param actorsInfo is the actor ArrayList
+	 * @return a list of actors that acted in both movies.
+	 */
+
+	public ArrayList <String> getCommonActors (String movie1, String movie2, ArrayList <Actor> actorsInfo) {
+		ArrayList <String> res = new ArrayList<>();
+		ArrayList <String> actors1 = selectWhereMovieIs (movie1, actorsInfo);
+		ArrayList <String> actors2 = selectWhereMovieIs (movie2, actorsInfo);
+		if (actors1.isEmpty() || actors2.isEmpty()) return res;
+		if(movie1.trim().toLowerCase().equals(movie2.trim().toLowerCase())) return actors1;
+		for (String actor : actors1) {
+			if (actors2.contains(actor)) res.add(actor);
+		}
+		return res;
+	}
+
+	/**
+	 * Given the moviesInfo DB, this static method returns the mean value of the critics’ ratings and the audience ratings.
+	 * @param moviesInfo is the ArrayList
+	 * @return  the mean values as a double array
+	 */
+
+	public static double [] getMean (ArrayList <Movie> moviesInfo) {
+		double [] mean = new double[2];
+		ArrayList<Integer> criticsRating = new ArrayList<>();
+		ArrayList<Integer> audienceRating = new ArrayList<>();
+		for (Movie movieInfo : moviesInfo) {
+			criticsRating.add(movieInfo.getCriticRating());
+			audienceRating.add(movieInfo.getAudienceRating());
+		}
+		int size = criticsRating.size();
+		double sumCriticsRating = 0;
+		double sumAudienceRating = 0;
+		for (int i = 0 ; i < size; i++){
+			sumCriticsRating += criticsRating.get(i);
+			sumAudienceRating += audienceRating.get(i);
+		}
+
+		mean[0] = sumCriticsRating / size;
+		mean[1] = sumAudienceRating / size;
+
+		return mean;
+	}
 }
+
+
+
+
