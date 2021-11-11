@@ -7,6 +7,7 @@ import java.util.Collections;
 
 /**
  * Movie trivia class providing different methods for querying and updating a movie database.
+ * @author Rui Tan
  */
 public class MovieTrivia {
 	
@@ -14,8 +15,7 @@ public class MovieTrivia {
 	 * Create instance of movie database
 	 */
 	MovieDB movieDB = new MovieDB();
-	
-	
+
 	public static void main(String[] args) {
 		
 		//create instance of movie trivia class
@@ -119,8 +119,16 @@ public class MovieTrivia {
 		for (int rating : ratings) {
 			if (rating < 0 || rating > 100) return;
 		}
+		for (Movie movieInfo: moviesInfo) {
+			if (movieInfo.getName().equals(movie.trim().toLowerCase())){
+				movieInfo.setAudienceRating(ratings[1]);
+				movieInfo.setCriticRating(ratings[0]);
+				return;
+			}
+		}
 		Movie newMovie = new Movie(movie.trim().toLowerCase(), ratings[0], ratings[1]);
 		moviesInfo.add(newMovie);
+		return;
 	}
 
 	/**
@@ -240,14 +248,14 @@ public class MovieTrivia {
 			// a list of actors in the given movie
 			ArrayList<String> actorsIn = selectWhereMovieIs (movieIn, actorsInfo);
 			for (String actorIn: actorsIn) {
-				if (! actorIn.equals(actor) && ! res.contains(actorIn)) res.add(actorIn.trim());
+				if (! actorIn.equals(actor.trim().toLowerCase()) && ! res.contains(actorIn.trim().toLowerCase())) res.add(actorIn.trim());
 			}
 		}
 		return res;
 	}
 
 	/**
-	 * get a list od movie where both actors were cast
+	 * get a list of movie where both actors were cast
 	 * @param actor1 actor names as String
 	 * @param actor2 actor names as String
 	 * @param actorsInfo the ArrayList to search through
