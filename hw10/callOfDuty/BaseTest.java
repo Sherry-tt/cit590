@@ -183,7 +183,6 @@ class BaseTest {
     @Test
     void testGetTargetsArray() {
         assertEquals(10, base.getTargetsArray().length);
-
     }
 
 

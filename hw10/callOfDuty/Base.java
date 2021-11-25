@@ -116,6 +116,14 @@ public class Base {
         String targetName = target.getTargetName().toLowerCase();
         int length = target.getLength();
         int width = target.getWidth();
+//        if(horizontal) {
+//            int length = target.getLength();
+//            int width = target.getWidth();
+//        } else {
+//            int width = target.getLength();
+//            int length = target.getWidth();
+//        }
+
         if (targetName.equals("headquarter")) {
             if(horizontal) return column <= 4 ? true : false;
             else return row <= 4 ? true : false;
@@ -124,11 +132,11 @@ public class Base {
             if (horizontal && column > 7) return false;
             if (!horizontal && row > 7) return false;
             // determine whether there is an overlap
-            return ! overlapOrNot(row, column, length, width);
+            return horizontal == true? ! overlapOrNot(row, column, length, width) : ! overlapOrNot(row, column, width, length);
         } else if(targetName.equals("barrack")) {
             if(horizontal && column > 7) return false;
             if(!horizontal && row > 7) return false;
-            return ! overlapOrNot(row, column, length, width);
+            return horizontal == true? ! overlapOrNot(row, column, length, width) : ! overlapOrNot(row, column, width, length);
         } else if(targetName.equals("sentrytower")) {
             return ! overlapOrNot(row, column, length, width);
         } else {
