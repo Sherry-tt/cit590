@@ -3,6 +3,9 @@ package callOfDuty;
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * Represents base
+ */
 public class Base {
     /**
      * Keeps a reference to the location of every Target in the game.
@@ -41,6 +44,13 @@ public class Base {
 
     /**
      * Create and place all Targets randomly on the Base
+     * 18 targets will be randomly placed without overlap.
+     * #1 HeadQuarter
+     * #2 #3 Armory
+     * #4 - #6 Barrack
+     * #7 - #10 SentryTower
+     * #11 -#14 Tank
+     * #15 - #18 OilDrum
      */
     public void placeAllTargetRandomly() {
         Random rand = new Random();
@@ -57,7 +67,6 @@ public class Base {
                 if (okToPlaceTargetAt(headQuarter, row, column, horizontal)) {
                     placeTargetAt(headQuarter, row, column, horizontal);
                     count++;
-//
                 }
             } else if(count == 2 || count == 3) {
                 // Armory
@@ -72,28 +81,28 @@ public class Base {
                 if (okToPlaceTargetAt(barrack, row, column, horizontal)) {
                     placeTargetAt(barrack, row, column, horizontal);
                     count++;
-//                    setTargetVariable(barrack, row, column, 1, 3, horizontal);
+//                  setTargetVariable(barrack, row, column, 1, 3, horizontal);
                 }
             } else if(count == 7 || count == 8 || count == 9 || count == 10) {
                 SentryTower sentryTower = new SentryTower(this);
                 if (okToPlaceTargetAt(sentryTower, row, column, horizontal)) {
                     placeTargetAt(sentryTower, row, column, horizontal);
                     count++;
-//                    setTargetVariable(sentryTower, row, column,1, 1, horizontal);
+//                  setTargetVariable(sentryTower, row, column,1, 1, horizontal);
                 }
             } else if(count == 11 || count == 12 || count == 13 || count == 14) {
                 Tank tank = new Tank(this);
                 if (okToPlaceTargetAt(tank, row, column, horizontal)) {
                     placeTargetAt(tank, row, column, horizontal);
                     count++;
-//                    setTargetVariable(tank, row, column,1, 1, horizontal);
+//                  setTargetVariable(tank, row, column,1, 1, horizontal);
                 }
             } else if (count == 15 || count == 16 || count == 17 || count == 18) {
                 OilDrum oilDrum = new OilDrum(this);
                 if (okToPlaceTargetAt(oilDrum, row, column, horizontal)) {
                     placeTargetAt(oilDrum, row, column, horizontal);
                     count++;
-//                    setTargetVariable(oilDrum, row, column,1, 1, horizontal);
+//                  setTargetVariable(oilDrum, row, column,1, 1, horizontal);
                 }
             }
         }
@@ -103,7 +112,6 @@ public class Base {
      * Sets the value of the “hit” array, “coordinate” array,
      * and “horizontal” boolean value of the target.
      */
-
     private void setTargetVariable(Target target, int x, int y, int row, int column, boolean horizontal) {
         target.setCoordinate(new int[] {x, y});
         target.setHorizontal(horizontal);
@@ -111,22 +119,24 @@ public class Base {
         else target.setHit(new int[column][row]);
     }
 
-
+    /**
+     * decide if the target ok to place at the given place
+     * @param target
+     * @param row
+     * @param column
+     * @param horizontal
+     * @return true of ok to place here
+     */
     public boolean okToPlaceTargetAt(Target target, int row, int column, boolean horizontal) {
         String targetName = target.getTargetName().toLowerCase();
         int length = target.getLength();
         int width = target.getWidth();
-//        if(horizontal) {
-//            int length = target.getLength();
-//            int width = target.getWidth();
-//        } else {
-//            int width = target.getLength();
-//            int length = target.getWidth();
-//        }
 
         if (targetName.equals("headquarter")) {
-            if(horizontal) return column <= 4 ? true : false;
-            else return row <= 4 ? true : false;
+            if(horizontal && column > 4) return false;
+            if (!horizontal && row > 4) return false;
+            return horizontal == true? ! overlapOrNot(row, column, length, width) : ! overlapOrNot(row, column, width, length);
+            // else return row <= 4 ? true : false;
         } else if (targetName.equals("armory")) {
             if (row == 9 || column == 9) return false;
             if (horizontal && column > 7) return false;
@@ -154,12 +164,11 @@ public class Base {
      * @param width of target
      * @return true if there is an overlap
      */
-
     private boolean overlapOrNot(int row, int column, int length, int width) {
         for(int i = row-1; i <= row + width; i++) {
             if(i < 0) continue;
             if (i > 9) return false;
-            for(int j = column -1; j < column + length; j++) {
+            for(int j = column -1; j <= column + length; j++) {
                 if (j < 0) continue;
                 if (j > 9) break;
                 if (! targets[i][j].getTargetName().toLowerCase().equals("ground")) return true;
@@ -168,6 +177,13 @@ public class Base {
         return false;
     }
 
+    /**
+     * place the target at given place and set the variables
+     * @param target
+     * @param row
+     * @param column
+     * @param horizontal
+     */
     public void placeTargetAt(Target target, int row, int column, boolean horizontal) {
         String targetName = target.getTargetName().toLowerCase();
         int length = target.getLength();
@@ -179,6 +195,14 @@ public class Base {
 
     }
 
+    /**
+     * implement the 'place' behavior
+     * @param target
+     * @param row
+     * @param column
+     * @param length
+     * @param width
+     */
     private void realPlace(Target target, int row, int column, int length, int width) {
 //        System.out.println(row + " " + column + " " + length + " " + width);
         for (int i = row; i < row + width; i++) {
@@ -235,9 +259,12 @@ public class Base {
         return true;
     }
 
-
+    /**
+     * print the base
+     */
     public void print() {
         System.out.print(" ");
+        // print column number
         for(int i = 0; i < 10; i++) {
             System.out.print(" " + i +" ");
         }
@@ -249,7 +276,7 @@ public class Base {
                 if(this.targets[i][j].isHitAt(i,j)) {
                     System.out.print(" " + targets[i][j] + " ");
                 } else {
-                    //  a location that you have never fired upon
+                    // a location that you have never fired upon
                     System.out.print(" . ");
                 }
             }

@@ -46,8 +46,18 @@ class TargetTest {
         assertEquals(1, barrack.getHit().length);
         assertEquals(3, barrack.getHit()[0].length);
 
-
         // TODO: add more cases
+        // SentryTower
+        assertEquals(1, st.getHit().length);
+        assertEquals(1, st.getHit()[0].length);
+
+        // Tank
+        assertEquals(1, tank.getHit().length);
+        assertEquals(1, tank.getHit()[0].length);
+
+        // OilDrum
+        assertEquals(1, od.getHit().length);
+        assertEquals(1, od.getHit()[0].length);
     }
 
     @Test
@@ -56,6 +66,11 @@ class TargetTest {
         assertEquals("T", tank.toString());
 
         // TODO: add more cases
+        assertEquals("-", base.getTargetsArray()[8][1].toString());
+
+        assertEquals("O", od.toString());
+        assertEquals("O", armory.toString());
+
     }
 
     @Test
@@ -65,6 +80,9 @@ class TargetTest {
         assertEquals("oildrum", od.getTargetName().toLowerCase());
 
         // TODO: add more cases
+        assertEquals("tank", base.getTargetsArray()[1][3].getTargetName().toLowerCase());
+        assertEquals("armory", base.getTargetsArray()[0][0].getTargetName().toLowerCase());
+        assertEquals("oildrum", od.getTargetName().toLowerCase());
     }
 
     @Test
@@ -74,6 +92,11 @@ class TargetTest {
         assertTrue(armory.isDestroyed());
 
         // TODO: add more cases
+        assertTrue(st.isDestroyed());
+
+        assertTrue(barrack.isHitAt(0,4));
+        assertTrue(barrack.isHitAt(0,5));
+        assertFalse(barrack.isHitAt(0,6));
     }
 
 
@@ -87,6 +110,15 @@ class TargetTest {
 
 
         // TODO: add more cases
+        tank.getShot(1, 3);
+        assertEquals(1, tank.getHit()[0][0]);
+        assertFalse(tank.isDestroyed());
+        tank.getShot(1, 3);
+        assertTrue(tank.isDestroyed());
+
+        barrack.getShot(0, 6);
+        assertEquals(1, barrack.getHit()[0][2]);
+
     }
 
     @Test
@@ -97,6 +129,8 @@ class TargetTest {
         assertTrue(tank.isDestroyed());
 
         // TODO: add more cases
+        assertTrue(armory.isDestroyed());
+        assertFalse(barrack.isDestroyed());
 
     }
 
@@ -110,6 +144,14 @@ class TargetTest {
         assertTrue(am.isHitAt(5, 5));
 
         // TODO: add more cases
+        assertFalse(am.isHitAt(5, 6));
+        am.getShot(5, 6);
+        assertTrue(am.isHitAt(5, 6));
+
+        assertFalse(barrack.isHitAt(0, 4));
+        barrack.getShot(0, 4);
+        assertTrue(barrack.isHitAt(0, 4));
     }
 
 }
+

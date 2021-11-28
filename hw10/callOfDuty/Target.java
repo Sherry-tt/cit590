@@ -1,5 +1,8 @@
 package callOfDuty;
 
+/**
+ * Abstract class Target represents a generic (or abstract) Target.
+ */
 public abstract class Target {
     /**
      * An array of length 2 that specifies the coordinate of the head of a
@@ -34,6 +37,9 @@ public abstract class Target {
      */
     private Base base;
 
+    /**
+     * decide whether a target is destroyed
+     */
     public boolean destroy = false;
 
     /**
@@ -142,10 +148,10 @@ public abstract class Target {
      */
     public void getShot (int row, int column) {
         this.hit[row - this.coordinate[0]][column - this.coordinate[1]] += 1;
-        if(this.isDestroyed() && this.destroy == false) {
+        if(this.isDestroyed() && this.destroy == false && !this.getTargetName().equals("ground")) {
             this.destroy = true;
-            this.explode();
             System.out.println("You have destroyed a " + this.getTargetName());
+            this.explode();
         }
     }
 

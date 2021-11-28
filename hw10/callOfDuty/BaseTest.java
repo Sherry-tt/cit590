@@ -43,6 +43,9 @@ class BaseTest {
         assertEquals(10, base.getTargetsArray().length);
 
         // TODO: add more cases
+        assertEquals(10, base.getTargetsArray()[0].length);
+        assertEquals("armory", base.getTargetsArray()[0][0].getTargetName().toLowerCase());
+        assertEquals("ground", base.getTargetsArray()[3][3].getTargetName().toLowerCase());
     }
 
     @Test
@@ -108,7 +111,9 @@ class BaseTest {
         assertTrue(this.base.okToPlaceTargetAt(new Armory(this.base), 1, 8, false));
 
         // TODO: add more cases
-
+        assertFalse(this.base.okToPlaceTargetAt(new Barrack(this.base), 5, 8, true));
+        assertFalse(this.base.okToPlaceTargetAt(new Barrack(this.base), 1, 6, true));
+        assertTrue(this.base.okToPlaceTargetAt(new OilDrum(this.base), 2, 5, true));
     }
 
 
@@ -123,6 +128,27 @@ class BaseTest {
         assertEquals(2, armory.getHit()[0].length);
 
      // TODO: add more cases
+        Target barrack = new Barrack(base);
+        this.base.placeTargetAt(barrack, 5, 0, true);
+        assertEquals(5, barrack.getCoordinate()[0]);
+        assertEquals(0, barrack.getCoordinate()[1]);
+        assertEquals(1, barrack.getHit().length);
+        assertEquals(3, barrack.getHit()[0].length);
+
+        Target barrackTwo = new Barrack(base);
+        this.base.placeTargetAt(barrackTwo, 7, 3, false);
+        assertEquals(7, barrackTwo.getCoordinate()[0]);
+        assertEquals(3, barrackTwo.getCoordinate()[1]);
+        assertEquals(3, barrackTwo.getHit().length);
+        assertEquals(1, barrackTwo.getHit()[0].length);
+
+        Target tank = new Tank(base);
+        this.base.placeTargetAt(tank, 9, 8, false);
+        assertEquals(9, tank.getCoordinate()[0]);
+        assertEquals(8, tank.getCoordinate()[1]);
+        assertEquals(1, tank.getHit().length);
+        assertEquals(1, tank.getHit()[0].length);
+
     }
 
 
@@ -134,6 +160,13 @@ class BaseTest {
         assertTrue(base.isOccupied(0, 0));
 
         // TODO: add more cases
+        assertTrue(base.isOccupied(0, 4));
+
+        assertFalse(base.isOccupied(7, 5));
+
+        Target barrackTwo = new Barrack(base);
+        this.base.placeTargetAt(barrackTwo, 7, 3, false);
+        assertTrue(base.isOccupied(9, 3));
     }
 
     @Test
@@ -146,6 +179,18 @@ class BaseTest {
         assertTrue(arm.isHitAt(5, 5));
 
         // TODO: add more cases
+        base.shootAt(0, 0);
+        assertFalse(armory.isHitAt(0, 1));
+
+        Target barrackTwo = new Barrack(base);
+        this.base.placeTargetAt(barrackTwo, 7, 3, false);
+        base.shootAt(8, 3);
+        assertTrue(barrackTwo.isHitAt(8, 3));
+
+        Target tank = new Tank(base);
+        this.base.placeTargetAt(tank, 9, 8, false);
+        base.shootAt(9, 8);
+        assertTrue(tank.isHitAt(9, 8));
     }
 
     @Test
@@ -154,6 +199,26 @@ class BaseTest {
         assertFalse(base.isGameOver(new RocketLauncher(), new Missile()));
 
         // TODO: add more cases
+        Weapon weaponRocket = new RocketLauncher();
+        Weapon weaponMissile = new Missile();
+
+        // use weaponMissile shot 3 times
+        for(int i = 0; i < 3; i++) {
+            weaponMissile.shootAt(1,2, base);
+        }
+        assertEquals(0, weaponMissile.getShotLeft());
+        assertFalse(base.isGameOver(weaponRocket, weaponMissile));
+
+        // use weaponRocket shot 3 times
+        for(int i = 0; i<20; i++)  {
+            weaponRocket.shootAt(2,2, base);
+        }
+        assertEquals(0, weaponRocket.getShotLeft());
+        assertTrue(base.isGameOver(weaponRocket, weaponMissile));
+
+        // new weaponRocket
+        Weapon weaponRocketTwo = new RocketLauncher();
+        assertFalse(base.isGameOver(weaponRocketTwo, weaponMissile));
     }
 
     @Test
@@ -161,6 +226,14 @@ class BaseTest {
         assertFalse(this.base.win());
 
         // TODO: add more cases
+        base.shootAt(8, 3);
+        assertFalse(this.base.win());
+
+        base.shootAt(0, 0);
+        assertFalse(this.base.win());
+
+        base.shootAt(9, 9);
+        assertFalse(this.base.win());
     }
 
     @Test
@@ -171,6 +244,19 @@ class BaseTest {
         assertEquals(1, base.getShotsCount());
 
         // TODO: add more cases
+        // increment two times
+        base.incrementShotsCount();
+        base.incrementShotsCount();
+        assertEquals(3, base.getShotsCount());
+
+        // increment another two times
+        base.incrementShotsCount();
+        base.incrementShotsCount();
+        assertEquals(5, base.getShotsCount());
+
+        // increment another one time
+        base.incrementShotsCount();
+        assertEquals(6, base.getShotsCount());
     }
 
     @Test
@@ -178,12 +264,27 @@ class BaseTest {
         base.setDestroyedTargetCount(10);
         assertEquals(10, base.getDestroyedTargetCount());
 
+        base.setDestroyedTargetCount(6);
+        assertEquals(6, base.getDestroyedTargetCount());
+
+        base.setDestroyedTargetCount(0);
+        assertEquals(0, base.getDestroyedTargetCount());
+
+        base.setDestroyedTargetCount(2);
+        assertEquals(2, base.getDestroyedTargetCount());
     }
 
     @Test
     void testGetTargetsArray() {
         assertEquals(10, base.getTargetsArray().length);
+
+        assertEquals(base.getTargetsArray()[0][1], base.getTargetsArray()[0][0]);
+
+        // add a new barrack
+        Target barrackTwo = new Barrack(base);
+        this.base.placeTargetAt(barrackTwo, 7, 3, false);
+        assertEquals(base.getTargetsArray()[7][3], base.getTargetsArray()[8][3]);
+
+        assertEquals("barrack", base.getTargetsArray()[7][3].getTargetName().toLowerCase());
     }
-
-
 }

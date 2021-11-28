@@ -1,7 +1,12 @@
 package callOfDuty;
 
+/**
+ * Represents a Tank
+ */
 public class Tank extends Target {
-
+    /**
+     * name
+     */
     public final String name = "tank";
 
     /**
@@ -31,11 +36,18 @@ public class Tank extends Target {
         }
     }
 
+    /**
+     * @return the name of target
+     */
     @Override
     public String getTargetName() {
         return this.name;
     }
 
+    /**
+     * Decide whether the tank is destroyed
+     * @return true if it has been destroyed
+     */
     @Override
     public boolean isDestroyed() {
         int row = this.getHit().length;
@@ -45,13 +57,12 @@ public class Tank extends Target {
                 if (this.getHit()[i][j] < 2) return false;
             }
         }
-//        if (this.destroy == false) {
-//            this.explode();
-//            this.destroy = true;
-//        }
         return true;
     }
 
+    /**
+     * @return a single-character String to use in the Base’s print method.
+     */
     @Override
     public String toString() {
         if (this.isDestroyed()) return "X";

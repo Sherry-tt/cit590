@@ -1,5 +1,8 @@
 package callOfDuty;
 
+/**
+ * Abstract class Weapon represents a generic (or abstract) Weapon.
+ */
 public abstract class Weapon {
     /**
      * The number of shots left.
@@ -31,8 +34,10 @@ public abstract class Weapon {
      */
     public abstract void shootAt(int row, int column, Base base);
 
+    /**
+     * decrease one each time
+     */
     public void decrementShotLeft() {
         this.shotleft -= 1;
-
     }
 }

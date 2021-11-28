@@ -1,5 +1,8 @@
 package callOfDuty;
 
+/**
+ * Represents the RocketLauncher
+ */
 public class RocketLauncher extends Weapon {
     /**
      * constructor

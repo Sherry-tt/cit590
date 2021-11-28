@@ -1,15 +1,19 @@
 package callOfDuty;
 
+/**
+ * Represents the OilDrum
+ */
 public class OilDrum extends Target {
+    /**
+     * name
+     */
     static final String name = "oilDrum";
     /**
      * constructor
      * @param base   of target
      */
-
     public OilDrum(Base base) {
         super(1,1, base);
-//        this.setHit(new int[1][1]);
     }
 
     /**
@@ -29,9 +33,11 @@ public class OilDrum extends Target {
                 this.getBase().shootAt(i,j);
             }
         }
-
     }
 
+    /**
+     * @return the name
+     */
     @Override
     public String getTargetName() {
         return this.name;
