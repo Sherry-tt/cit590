@@ -7,6 +7,10 @@ import java.util.ArrayList;
 
 public class Admin extends User {
 
+    /**
+     * constructor
+     * @param str given string
+     */
     public Admin(String str) {
         String[] admin = str.split(";");
         this.id = admin[0].trim();
@@ -15,11 +19,21 @@ public class Admin extends User {
         this.password = admin[3].trim();
     }
 
+    /**
+     * constructor
+     */
     public Admin() {
 
     }
 
 
+    /**
+     * login in
+     * @param username of admin
+     * @param password of admin
+     * @param file file
+     * @return true of login in successfully
+     */
     @Override
     public boolean login(String username, String password, FileInfoReader file) {
         ArrayList<Admin> admins = file.getAdmins();
@@ -31,6 +45,13 @@ public class Admin extends User {
         return false;
     }
 
+    /**
+     * get object
+     * @param username of admin
+     * @param password od admin
+     * @param file file
+     * @return Admin object
+     */
     @Override
     public Admin getLogin (String username, String password, FileInfoReader file) {
         ArrayList<Admin> admins = file.getAdmins();
@@ -43,6 +64,10 @@ public class Admin extends User {
     }
 
 
+    /**
+     * 1- view all courses
+     * @param file file
+     */
     public void viewAllCourse(FileInfoReader file) {
         ArrayList<Course> courses = file.getCourses();
         for (Course cour : courses) {
@@ -50,45 +75,11 @@ public class Admin extends User {
         }
     }
 
-    /**
-     * check if the course has already exists
-     * @param id of course
-     * @param file name
-     * @return true if it can be added
-     */
-    public boolean beforeAddCourse(String id, FileInfoReader file) {
-        boolean isExist = file.checkCourseExist(id);
-        if (isExist) {
-            System.out.println("The course already exist");
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * check if the professor has already exists
-     * @param lecturerId id of lecturer
-     * @param file file
-     * @return true if professor exists
-     */
-
-    public boolean checkProfExist(String lecturerId, FileInfoReader file) {
-        // if not exist, add prof to list first
-        ArrayList<Professor> profs = file.getProfessors();
-        for (Professor prof : profs) {
-            if (prof.getId().equals(lecturerId)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * 2- add new courses
-
      * @param file
      */
-
     public void addCourses(String strCourse, FileInfoReader file, String lecturerId, String courseId) {
         // get prof info based on id
         Professor prof = file.getOneProf(lecturerId);
@@ -110,6 +101,40 @@ public class Admin extends User {
         thisCourse.printCourse();
     }
 
+    /**
+     * check if the course has already exists
+     * @param id of course
+     * @param file name
+     * @return true if it can be added
+     */
+    public boolean beforeAddCourse(String id, FileInfoReader file) {
+        boolean isExist = file.checkCourseExist(id);
+        if (isExist) {
+            System.out.println("The course already exist");
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * check if the professor has already exists
+     * @param lecturerId id of lecturer
+     * @param file file
+     * @return true if professor exists
+     */
+    public boolean checkProfExist(String lecturerId, FileInfoReader file) {
+        // if not exist, add prof to list first
+        ArrayList<Professor> profs = file.getProfessors();
+        for (Professor prof : profs) {
+            if (prof.getId().equals(lecturerId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
 
     /**
@@ -121,6 +146,7 @@ public class Admin extends User {
         file.setStudents(strStu);
     }
 
+
     /**
      * add the professor to system
      * @param strProf
@@ -130,6 +156,7 @@ public class Admin extends User {
         file.setProfessors(strProf);
 
     }
+
 
     /**
      * delete professor with given id
@@ -146,8 +173,13 @@ public class Admin extends User {
         }
     }
 
+    /**
+     * delete student based on id
+     * @param id student id
+     * @param file file
+     */
     public void deleteStu(String id, FileInfoReader file) {
-        if (checkProfExist(id, file)) {
+        if (beforeDelStu(id, file)) {
             file.removeStudent(id);
             System.out.println("Delete successful");
         } else {
@@ -156,6 +188,11 @@ public class Admin extends User {
 
     }
 
+    /**
+     * delete course based on id
+     * @param id of course
+     * @param file file
+     */
     public void deleteCourse(String id, FileInfoReader file) {
         if (beforeDelCourse(id, file)) {
             file.removeCourse(id);
@@ -166,22 +203,6 @@ public class Admin extends User {
 
     }
 
-//    /**
-//     * check if prof id in system
-//     * @param id
-//     * @param file
-//     * @return true if exist
-//     */
-//    public boolean beforeDelProf(String id, FileInfoReader file) {
-//        ArrayList<Professor> professors = file.getProfessors();
-//        for(Professor prof : professors) {
-//            if (prof.getId().equals(id)) {
-//                return true;
-//            }
-//        }
-//
-//        return false;
-//    }
 
     /**
      * check if course id in system
@@ -200,6 +221,7 @@ public class Admin extends User {
         return false;
     }
 
+
     /**
      * check if course exists
      * @param id of course
@@ -217,6 +239,7 @@ public class Admin extends User {
         System.out.println("Delete failed, course does not exists.");
         return false;
     }
+
 
     /**
      * chack if the new course is conflict with exiting classes
@@ -244,6 +267,7 @@ public class Admin extends User {
         // no conflict
         return false;
     }
+
 
     /**
      * pring message when there is a conflict

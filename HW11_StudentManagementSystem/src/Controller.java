@@ -68,6 +68,7 @@ public class Controller {
                 ad = admin.getLogin(np[0], np[1], file);
                 system.dealWithAdmin(ad, file);
             } else if(choice == 4) break;
+            else continue;
         }
     }
 
@@ -381,7 +382,7 @@ public class Controller {
         }
 
         admin.addStudent(str, file);
-        System.out.println("Successfully added the new sturet: " + id + name);
+        System.out.println("Successfully added the new student: " + id + " " + name);
     }
 
 
