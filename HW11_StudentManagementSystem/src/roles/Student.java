@@ -262,4 +262,8 @@ public class Student extends User{
         return false;
     }
 
+    public String getUsername() {
+        return this.username;
+    }
+
 }

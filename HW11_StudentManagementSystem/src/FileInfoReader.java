@@ -147,6 +147,13 @@ public class FileInfoReader {
         return null;
     }
 
+    public Course getOneCourse(String courseId){
+        for (Course cour : this.courses) {
+            if (cour.getId().equals(courseId)) return cour;
+        }
+        return null;
+    }
+
     /**
      * remove the course based on ID
      * @param id

@@ -42,7 +42,21 @@ public class Admin extends User {
         return null;
     }
 
-    public boolean beforeAdd(String id, FileInfoReader file) {
+
+    public void viewAllCourse(FileInfoReader file) {
+        ArrayList<Course> courses = file.getCourses();
+        for (Course cour : courses) {
+            cour.printCourse();
+        }
+    }
+
+    /**
+     * check if the course has already exists
+     * @param id of course
+     * @param file name
+     * @return true if it can be added
+     */
+    public boolean beforeAddCourse(String id, FileInfoReader file) {
         boolean isExist = file.checkCourseExist(id);
         if (isExist) {
             System.out.println("The course already exist");
@@ -51,29 +65,36 @@ public class Admin extends User {
         return true;
     }
 
-    public void checkProfExist(String lecturerId) {
+    /**
+     * check if the professor has already exists
+     * @param lecturerId id of lecturer
+     * @param file file
+     * @return true if professor exists
+     */
+
+    public boolean checkProfExist(String lecturerId, FileInfoReader file) {
         // if not exist, add prof to list first
+        ArrayList<Professor> profs = file.getProfessors();
+        for (Professor prof : profs) {
+            if (prof.getId().equals(lecturerId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * 2- add new courses
-     * @param id
-     * @param name
-     * @param start
-     * @param end
-     * @param days
-     * @param capacity
-     * @param lecturerId
+
      * @param file
      */
 
-    public void addCourses(String id, String name, String start, String end,
-                            String days, String capacity, String lecturerId, FileInfoReader file) {
+    public void addCourses(String strCourse, FileInfoReader file, String lecturerId, String courseId) {
         // get prof info based on id
         Professor prof = file.getOneProf(lecturerId);
         //check if prof has conflict
-        String strCourse = id + ";" + name + ";" + prof.getName() +" " +
-                days + ";" + start + ";" +  end + ";" + capacity;
+
+        prof.setTeach(file);
         ArrayList<Course> profCourses = prof.getCourses();
         Course str = new Course(strCourse);
         for (Course course : profCourses) {
@@ -84,6 +105,9 @@ public class Admin extends User {
         }
         //CIT595; Computer Systems Programming; Insup Lee; TR; 15:00; 16:30; 72
         file.setCourses(strCourse);
+        Course thisCourse = file.getOneCourse(courseId);
+        System.out.print("Successfully added the course: ");
+        thisCourse.printCourse();
     }
 
 
@@ -104,36 +128,60 @@ public class Admin extends User {
      */
     public void addProf(String strProf, FileInfoReader file) {
         file.setProfessors(strProf);
+
     }
 
+    /**
+     * delete professor with given id
+     * @param id of prof
+     * @param file name
+     */
+
     public void deleteProf(String id, FileInfoReader file) {
-        file.removeProfessor(id);
+        if (checkProfExist(id, file)) {
+            file.removeProfessor(id);
+            System.out.println("Delete successful");
+        } else{
+            System.out.println("Delete failed, lecturer does not exists.");
+        }
     }
 
     public void deleteStu(String id, FileInfoReader file) {
-        file.removeStudent(id);
+        if (checkProfExist(id, file)) {
+            file.removeStudent(id);
+            System.out.println("Delete successful");
+        } else {
+            System.out.println("Delete failed, lecturer does not exists.");
+        }
 
     }
 
     public void deleteCourse(String id, FileInfoReader file) {
-        file.removeCourse(id);
+        if (beforeDelCourse(id, file)) {
+            file.removeCourse(id);
+            System.out.println("Delete successful");
+        } else {
+            System.out.println("Delete failed, course does not exists.");
+        }
+
     }
 
-    /**
-     * check if prof id in system
-     * @param id
-     * @param file
-     * @return true if exist
-     */
-    public boolean beforeDelProf(String id, FileInfoReader file) {
-        ArrayList<Professor> professors = file.getProfessors();
-        for(Professor prof : professors) {
-            if (prof.getId().equals(id)) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    /**
+//     * check if prof id in system
+//     * @param id
+//     * @param file
+//     * @return true if exist
+//     */
+//    public boolean beforeDelProf(String id, FileInfoReader file) {
+//        ArrayList<Professor> professors = file.getProfessors();
+//        for(Professor prof : professors) {
+//            if (prof.getId().equals(id)) {
+//                return true;
+//            }
+//        }
+//
+//        return false;
+//    }
 
     /**
      * check if course id in system
@@ -152,6 +200,13 @@ public class Admin extends User {
         return false;
     }
 
+    /**
+     * check if course exists
+     * @param id of course
+     * @param file name
+     * @return true if course exists
+     */
+
     public boolean beforeDelCourse(String id, FileInfoReader file) {
         ArrayList<Course> courses = file.getCourses();
         for(Course course : courses) {
@@ -159,6 +214,7 @@ public class Admin extends User {
                 return true;
             }
         }
+        System.out.println("Delete failed, course does not exists.");
         return false;
     }
 
@@ -220,16 +276,16 @@ public class Admin extends User {
     }
 
     /**
-     * check name before add students
-     * @param name of students
+     * check username before add students
+     * @param username of students
      * @param file file
      * @return true if this name can be used
      */
 
-    public boolean beforeAddStuName (String name, FileInfoReader file) {
+    public boolean beforeAddStuUsername (String username, FileInfoReader file) {
         ArrayList<Student> students = file.getStudents();
         for(Student stu : students) {
-            if (stu.getName().equals(name)) {
+            if (stu.getUsername().equals(username)) {
                 System.out.println("The username you entered is not available.");
                 return false;
             }
@@ -257,23 +313,21 @@ public class Admin extends User {
     }
 
     /**
-     * check name before add students
-     * @param name of students
+     * check name before add professor
+     * @param username of professor
      * @param file file
      * @return true if this name can be used
      */
 
-    public boolean beforeAddProfName (String name, FileInfoReader file) {
+    public boolean beforeAddProfUsername (String username, FileInfoReader file) {
         ArrayList<Professor> professors = file.getProfessors();
         for(Professor prof : professors) {
-            if (prof.getName().equals(name)) {
+            if (prof.getUsername().equals(username)) {
                 System.out.println("The username you entered is not available.");
                 return false;
             }
         }
         return true;
     }
-
-
 
 }

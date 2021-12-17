@@ -91,6 +91,7 @@ public class Professor extends User{
     }
 
     public ArrayList<Course> getCourses() {
+
         return this.courses;
     }
 
@@ -101,6 +102,8 @@ public class Professor extends User{
     public String getName() {
         return this.name;
     }
+
+    public String getUsername() {return this.username;}
 
 
 }
