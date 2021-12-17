@@ -1,4 +1,4 @@
-package callOfDuty;
+package src.callOfDuty;
 
 /**
  * Represents HeadQuarter

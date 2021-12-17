@@ -1,6 +1,5 @@
-package callOfDuty;
+package src.callOfDuty;
 
-import java.util.Locale;
 import java.util.Scanner;
 
 /**
