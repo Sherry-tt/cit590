@@ -145,6 +145,7 @@ public class Controller {
             int option = printAdminInterface();
             // 1- View given courses
             if(option == 1) {
+                System.out.println("--------------The course list----------------");
                 admin.viewAllCourse(file);
             } else if(option == 2) {
                 // 2 -- Add new courses
@@ -168,7 +169,7 @@ public class Controller {
                 }
             } else if (option == 6) {
                 // 6- Add new student
-                adminFourAddProf(admin, file);
+                adminSixAddStu(admin, file);
             } else if(option == 7) {
                 // 7 - Delete student
                 System.out.println("Please enter the Student ID, or type 'q' to end");
@@ -380,6 +381,7 @@ public class Controller {
         }
 
         admin.addStudent(str, file);
+        System.out.println("Successfully added the new sturet: " + id + name);
     }
 
 

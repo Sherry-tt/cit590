@@ -7,6 +7,7 @@ import src.roles.Student;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class FileInfoReader {
@@ -160,8 +161,17 @@ public class FileInfoReader {
      */
 
     public void removeCourse(String id) {
-        for (Course course : courses) {
-            if (course.getId().equals(id)) courses.remove(course);
+//        for (Course course : courses) {
+//            if (course.getId().equals(id)) courses.remove(course);
+//        }
+
+        Iterator<Course> iterator = this.courses.iterator();
+        while (iterator.hasNext()){
+            Course next = iterator.next();
+            if(next.getId().equals(id)){
+                iterator.remove();
+                return;
+            }
         }
     }
 
