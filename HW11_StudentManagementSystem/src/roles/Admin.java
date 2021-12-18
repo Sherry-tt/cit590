@@ -5,6 +5,9 @@ import src.FileInfoReader;
 
 import java.util.ArrayList;
 
+/**
+ * Represent an administractor
+ */
 public class Admin extends User {
 
     /**
@@ -135,8 +138,6 @@ public class Admin extends User {
     }
 
 
-
-
     /**
      * add the student to system
      * @param strStu student's information
@@ -146,7 +147,6 @@ public class Admin extends User {
         file.setStudents(strStu);
     }
 
-
     /**
      * add the professor to system
      * @param strProf
@@ -154,7 +154,6 @@ public class Admin extends User {
      */
     public void addProf(String strProf, FileInfoReader file) {
         file.setProfessors(strProf);
-
     }
 
 
@@ -229,7 +228,7 @@ public class Admin extends User {
      * @return true if course exists
      */
 
-    public boolean beforeDelCourse(String id, FileInfoReader file) {
+    private boolean beforeDelCourse(String id, FileInfoReader file) {
         ArrayList<Course> courses = file.getCourses();
         for(Course course : courses) {
             if (course.getId().equals(id)) {
@@ -353,5 +352,4 @@ public class Admin extends User {
         }
         return true;
     }
-
 }

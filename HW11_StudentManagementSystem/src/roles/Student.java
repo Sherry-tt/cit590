@@ -5,6 +5,9 @@ import src.FileInfoReader;
 
 import java.util.*;
 
+/**
+ * Represent a student
+ */
 public class Student extends User{
 
     //String[] courses;
@@ -246,13 +249,13 @@ public class Student extends User{
         return this.schedule;
     }
 
-    public String getId() {
-        return this.id;
-    }
+//    public String getId() {
+//        return this.id;
+//    }
 
-    public String getName() {
-        return this.name;
-    }
+//    public String getName() {
+//        return this.name;
+//    }
 
 
     public boolean planCourse(String courseId) {
@@ -262,8 +265,8 @@ public class Student extends User{
         return false;
     }
 
-    public String getUsername() {
-        return this.username;
-    }
+//    public String getUsername() {
+//        return this.username;
+//    }
 
 }

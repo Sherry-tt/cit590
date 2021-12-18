@@ -8,9 +8,19 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Represent professor object
+ */
 public class Professor extends User{
+    /**
+     * course list
+     */
     ArrayList<Course> courses = new ArrayList<>();
 
+    /**
+     * constructor
+     * @param str professor information
+     */
     public Professor(String str) {
         String[] professor = str.split(";");
         this.id = professor[1].trim();
@@ -20,10 +30,20 @@ public class Professor extends User{
 
     }
 
+    /**
+     * constructor
+     */
     public Professor() {
 
     }
 
+    /**
+     * login as professor
+     * @param username of professor
+     * @param password of professor
+     * @param file file
+     * @return true if login in successfully
+     */
     @Override
     public boolean login(String username, String password, FileInfoReader file) {
         ArrayList<Professor> professors = file.getProfessors();
@@ -35,6 +55,13 @@ public class Professor extends User{
         return false;
     }
 
+    /**
+     * get login information
+     * @param username of professor
+     * @param password of professor
+     * @param file file
+     * @return professor object
+     */
     @Override
     public Professor getLogin (String username, String password, FileInfoReader file) {
         ArrayList<Professor> professors = file.getProfessors();
@@ -46,7 +73,10 @@ public class Professor extends User{
         return null;
     }
 
-    // set the information for courses they teach
+    /**
+     * set the information for courses they teach
+     * @param file file
+     */
     public void setTeach(FileInfoReader file) {
         ArrayList<Course> courses = file.getCourses();
         this.courses = new ArrayList<>();
@@ -57,8 +87,10 @@ public class Professor extends User{
         }
     }
 
-    //
-    // get the information for courses they teach
+    /**
+     * get the information for courses they teach
+     * @param file file
+     */
     public void courseTeach(FileInfoReader file) {
         setTeach(file);
         ArrayList<Course> courses = file.getCourses();
@@ -70,7 +102,11 @@ public class Professor extends User{
     }
 
 
-    // view student list
+    /**
+     * view student list
+     * @param courseId course id
+     * @param file file
+     */
     public void studentInCourse(String courseId, FileInfoReader file) {
         ArrayList<Student> students = file.getStudents();
         ArrayList<Course> courses = file.getCourses();
@@ -90,20 +126,35 @@ public class Professor extends User{
         System.out.println();
     }
 
+    /**
+     * get the course list the professor teach
+     * @return course list
+     */
     public ArrayList<Course> getCourses() {
-
         return this.courses;
     }
 
-    public String getId() {
-        return this.id;
-    }
+//    /**
+//     * get professor id
+//     * @return professor id
+//     */
+//    public String getId() {
+//        return this.id;
+//    }
 
-    public String getName() {
-        return this.name;
-    }
+//    /**
+//     * get the professor name
+//     * @return professor name
+//     */
+//    public String getName() {
+//        return this.name;
+//    }
 
-    public String getUsername() {return this.username;}
+//    /**
+//     * get professor username
+//     * @return professor username
+//     */
+//    public String getUsername() {return this.username;}
 
 
 }

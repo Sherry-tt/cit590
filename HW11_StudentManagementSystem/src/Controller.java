@@ -7,14 +7,17 @@ import src.roles.Student;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * represent a Student Management System
+ */
 public class Controller {
     Scanner scan = new Scanner(System.in);
 
-
-
-
+    /**
+     * System starts here
+     * @param str
+     */
     public static void main(String[] str) {
-//        System.out.println("Please enter your username, or type 'q' to quit ");
         Controller system = new Controller();
         FileInfoReader file = new FileInfoReader();
 
@@ -141,6 +144,11 @@ public class Controller {
         }
     }
 
+    /**
+     * when login in as an admin
+     * @param admin object
+     * @param file file
+     */
     private void dealWithAdmin(Admin admin, FileInfoReader file) {
         while(true) {
             int option = printAdminInterface();
@@ -215,6 +223,13 @@ public class Controller {
     }
 
 //---------------------------Professor----------------------------------
+
+    /**
+     * login in as professor and choose to view student list of a course
+     * @param professor object
+     * @param file file
+     * @return course if
+     */
     private String profTwoViewStudent(Professor professor, FileInfoReader file) {
         professor.courseTeach(file);
         System.out.println("Please enter the course ID, eg. 'CIS519'.");
@@ -225,6 +240,12 @@ public class Controller {
 
 
 //---------------------------Administrator----------------------------------
+
+    /**
+     * login in as admin and want to add course
+     * @param admin admin
+     * @param file file
+     */
     private void adminTwoAddCourse(Admin admin, FileInfoReader file) {
         // get course ID
         System.out.println("Please enter the course ID, or type 'q' to end.");
@@ -283,12 +304,14 @@ public class Controller {
                 admin.addCourses(strCourse, file, lecturerId, id);
             }
         }
-
-        // check if time conflict
-
     }
 
 
+    /**
+     * login in as admin and want to add professor
+     * @param admin admin
+     * @param file file
+     */
     private void adminFourAddProf(Admin admin, FileInfoReader file) {
         System.out.println("Please enter the professor's ID, or type 'q' to quit ");
         String id = scan.next();
@@ -326,6 +349,11 @@ public class Controller {
         System.out.println("Successfully add the new professor: " + id +" "+ name);
     }
 
+    /**
+     * login in as admin and want to add student
+     * @param admin admin
+     * @param file file
+     */
     private void adminSixAddStu(Admin admin, FileInfoReader file) {
         System.out.println("Please enter the student's ID, or type 'q' to quit ");
         String id = scan.next();
@@ -460,6 +488,10 @@ public class Controller {
         return Integer.valueOf(option);
     }
 
+    /**
+     * print the administrator interface
+     * @return
+     */
     private int printAdminInterface() {
         System.out.println("--------------------");
         System.out.println("Welcome, admin" );

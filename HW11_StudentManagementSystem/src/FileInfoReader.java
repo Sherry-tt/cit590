@@ -10,19 +10,44 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * read the file in
+ */
 public class FileInfoReader {
 
+    /**
+     * student list
+     */
     public static List<String> studentList;
+    /**
+     * professor list
+     */
     public static List<String> profList;
+    /**
+     * administrator list
+     */
     public static List<String> adminList;
+    /**
+     * course list
+     */
     public static List<String> courseList;
 
+    /**
+     * all courses
+     */
     private ArrayList<Course> courses = new ArrayList<>();
+    /**
+     * all students
+     */
     private ArrayList<Student> students = new ArrayList<>();
+    /**
+     * all administrators
+     */
     private ArrayList<Admin> admins = new ArrayList<>();
+    /**
+     * all professors
+     */
     private ArrayList<Professor> professors = new ArrayList<>();
-
-
 
 
     /**
@@ -49,9 +74,6 @@ public class FileInfoReader {
             constructAdmins();
             constructProfessors();
 
-//            for (String line : allLines_4) {
-//                System.out.println(line);
-//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -93,19 +115,34 @@ public class FileInfoReader {
         }
     }
 
-
+    /**
+     * get the students list
+     * @return students list
+     */
     public ArrayList<Student> getStudents() {
         return this.students;
     }
 
+    /**
+     * get the admins list
+     * @return admins list
+     */
     public ArrayList<Admin> getAdmins() {
         return this.admins;
     }
 
+    /**
+     * get the Professors list
+     * @return Professors list
+     */
     public ArrayList<Professor> getProfessors() {
         return this.professors;
     }
 
+    /**
+     * get the courses list
+     * @return courses list
+     */
     public ArrayList<Course> getCourses() {
         return this.courses;
     }
@@ -124,14 +161,26 @@ public class FileInfoReader {
         return false;
     }
 
+    /**
+     * set the course list
+     * @param course given course information
+     */
     public void setCourses(String course) {
         this.courses.add(new Course(course));
     }
 
+    /**
+     * set the student list
+     * @param student given student information
+     */
     public void setStudents(String student) {
         this.students.add(new Student(student));
     }
 
+    /**
+     * set the professor list
+     * @param professor given student information
+     */
     public void setProfessors(String professor) {
         this.professors.add(new Professor(professor));
     }
@@ -148,6 +197,11 @@ public class FileInfoReader {
         return null;
     }
 
+    /**
+     * get one course object
+     * @param courseId id of course
+     * @return Course obkect
+     */
     public Course getOneCourse(String courseId){
         for (Course cour : this.courses) {
             if (cour.getId().equals(courseId)) return cour;
@@ -159,7 +213,6 @@ public class FileInfoReader {
      * remove the course based on ID
      * @param id
      */
-
     public void removeCourse(String id) {
 //        for (Course course : courses) {
 //            if (course.getId().equals(id)) courses.remove(course);
@@ -175,19 +228,40 @@ public class FileInfoReader {
         }
     }
 
+    /**
+     * remove the Professor based on ID
+     * @param id of Professor
+     */
     public void removeProfessor(String id) {
-        for (Professor prof : professors) {
-            if (prof.getId().equals(id)) courses.remove(prof);
+//        for (Professor prof : professors) {
+//            if (prof.getId().equals(id)) courses.remove(prof);
+//        }
+        Iterator<Professor> iterator = this.professors.iterator();
+        while (iterator.hasNext()){
+            Professor next = iterator.next();
+            if(next.getId().equals(id)){
+                iterator.remove();
+                return;
+            }
         }
     }
 
+    /**
+     * remove the Student based on ID
+     * @param id of Student
+     */
     public void removeStudent(String id) {
-        for (Student stu : students) {
-            if (stu.getId().equals(id)) courses.remove(stu);
+//        for (Student stu : students) {
+//            if (stu.getId().equals(id)) courses.remove(stu);
+//        }
+
+        Iterator<Student> iterator = this.students.iterator();
+        while (iterator.hasNext()){
+            Student next = iterator.next();
+            if(next.getId().equals(id)){
+                iterator.remove();
+                return;
+            }
         }
     }
-
-
-
-
 }
